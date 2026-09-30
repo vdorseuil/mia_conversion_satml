@@ -28,7 +28,7 @@ K_FOLDS = 5
 SEED = 0
 
 CSV_PATH = THEORY_DIR / "Theoretical_coverage.csv"
-BOUNDS_PATH = THEORY_DIR / "Theoretical_coverage_bounds.csv"
+BOUNDS_PATH = THEORY_DIR / "Theoretical_coverage_distribution.csv"
 
 METHODS = ["cp_max", "cp_fixed", "cp_union", "dkw", "holdout", "k_fold"]  
 LOWER_FUNCTIONS = {"mu_gdp": mu_gdp_lower, "eps_delta": partial(epsilon_dp_lower, delta=DELTA)}
