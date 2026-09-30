@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.egg-info/
+data/
+*.log
+.DS_Store
+.ruff_cache/
+
+src/selection_bias/papers_experiments/nasr2023_accuracy.py
+src/selection_bias/utils/table_results.py
