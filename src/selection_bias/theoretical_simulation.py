@@ -23,7 +23,7 @@ N_LIST = [100, 1000, 10000] # samples per hypothesis (n_in = n_out = n)
 MU_LIST = [0.5, 1, 2, 4]
 GAMMAS = [0.05, 0.01] # CI = 1-gamma  
 DELTA = 1e-5
-N_TRIALS = 10000
+N_TRIALS = 100 #Was performed with N_TRIALS=10000 in the paper.
 K_FOLDS = 5
 SEED = 0
 
@@ -49,6 +49,7 @@ def true_value(family, mu):
 
 
 # Simulation
+
 def run_cell(cell):
     """Every method on every audit for one (n, mu).
     Returns one row per (trial, gamma, family) with the lower bound of each method in its column."""
@@ -103,8 +104,9 @@ def run_experiment():
     cells = [(n, mu) for n in N_LIST for mu in MU_LIST]
     cells = [(n, mu, SEED + i) for i, (n, mu) in enumerate(cells)] 
     cells = sorted(cells, reverse=True)
+    results = []
     with Pool() as pool:
-        results = pool.map(run_cell, cells, chunksize=1)
+        results = pool.map(run_cell, cells, chunksize=1) #This is just an optimization to use all the cpus, equiavalent to a for loop to run the code for each cell.
     bounds = pd.DataFrame([row for rows in results for row in rows]).sort_values(["gamma", "family", "mu", "n", "trial"])
     save_bounds(bounds)
     summarize(bounds).to_csv(CSV_PATH, index=False)
