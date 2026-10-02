@@ -6,7 +6,7 @@ The repository has three parts: a simulation that measures the coverage of sever
 
 ## Setup
 ```bash
-uv sync        # or: pip install -e .
+uv sync  # or: pip install -e .
 ```
 Tested with Python 3.13 on Linux. The datasets (about 500 MB) are downloaded to `data/` the first time a script
 needs them: CIFAR-10, the Fashion-MNIST files released with the code of Jagielski et al., the CIFAR-10 features and
@@ -21,7 +21,7 @@ levels, numbers of runs and repetitions are the constants at the top of each scr
 ```bash
     python -m selection_bias.theoretical_simulation  # ->  results/theoretical/
 ```
-This script simulates the Gaussian mechanism and computes the coverage of different estimators. The estimators are implemented in
+This script simulates the Gaussian mechanism and computes the coverage of different estimators. In the paper we reported the miscoverage (1-coverage) of each estimator. The estimators are implemented in
 `src/selection_bias/utils/utils.py` and differ in how the threshold is chosen:
 
 | Name | Threshold | Valid |
@@ -33,8 +33,9 @@ This script simulates the Gaussian mechanism and computes the coverage of differ
 | `holdout` | chosen on one half of the scores, bound computed on the other half | yes |
 | `k_fold` | chosen on one fold, bound on the K − 1 others, best fold kept at level γ / K | yes |
 
-Two CSV files are written. `Theoretical_coverage_distribution.csv` has one row per ($n, \mu, \gamma$, family, trial)$ and one colum per estimator with its bound, to plot their distributions. `Theoretical_coverage.csv` aggregates them into the overage (fraction of the bounds below the true value), mean and standard deviation of each estimator in each cell.
+Two CSV files are written. `Theoretical_coverage_distribution.csv` has one row per ($n, \mu, \gamma$, family, trial)$ and one colum per estimator with its bound, to plot their distributions. `Theoretical_coverage.csv` aggregates them into the overage (fraction of the bounds below the true value), mean and standard deviation of each estimator in each cell. The script also computes the coverage and statistics of the same Gaussian distribution but with $(\varepsilon, \delta)$ family.
 The simulation runs on CPU, the cells in parallel.
+To be fast to run the script is implemented with `N_TRIALS = 100`, while the results were reported for `N_TRIALS = 10000` in the paper.
 
 ## 2. Re-run of the published audits
 ```bash 
@@ -54,7 +55,7 @@ others run on CPU.
 
 
 ### Score files
-One parquet file per setting (a privacy level and, where relevant, a number of copies, an initialization or a run),
+One parquet file is generated per setting (a privacy level and, where relevant, a number of copies, an initialization or a run),
 with one row per observation. The columns described in `src/selection_bias/utils/score_formats.py`.
 
 The one-run scripts also write one CSV file per run in `results/experiments/lower_bounds/one_run_audits/`.
